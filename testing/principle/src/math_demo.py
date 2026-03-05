@@ -1,4 +1,4 @@
 def add(a, b):
-    a+b
+    return a+b
 def add_with_bug(a, b):
     return a*b
