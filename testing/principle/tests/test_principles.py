@@ -9,5 +9,5 @@ def test_addition():
     print("test ADDIOTION PASSED")
 
 
-if name == "__main__":
+if __name__ == "__main__":
     test_addition()
