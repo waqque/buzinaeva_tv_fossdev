@@ -9,7 +9,10 @@ sys.path.append("../src")
 # Тесты должны покрывать "кластеры" входных параметров
 # Тесты должны обнаруживать новые ошибки (pescicide paradox)
 # Тесты покрывают как успешные, так и ошибочные кейсы
-from math_demo import (add, add_with_bug)
+# Тестовые функции должны тестировать логические блоки
+# Одни и теже типы это pesticide paradox
+
+from math_demo import (add, add_with_bug,calculate_tax_bugged)
 def test_addition():
     assert 2 + 2 == 4
     print("test ADDIOTION PASSED")
@@ -46,10 +49,31 @@ def test_addition_commutative():
     assert add(7, 6) == 13
     assert add(6, 7) == 13
     print("Test COMMUTATIVE PASSED")
+
+def test_tax_calculator():
+    assert calculate_tax_bugged(1000) == 150
+    assert calculate_tax_bugged(100) == 15
+    assert calculate_tax_bugged(10) == 1.5
+    assert calculate_tax_bugged(1) == 0.15
+    assert calculate_tax_bugged(234) == 35.1
+    assert calculate_tax_bugged(2.34) == 0.35
+    print("test TAX CALCULATOR PASSED")
+    
+def test_tax_calculator_pesticide():
+    assert calculate_tax(1000) == 150
+    assert calculate_tax(100) == 15
+    assert calculate_tax(10) == 1.5
+    assert calculate_tax(1) == 0.15
+    assert calculate_tax(234) == 35.1
+    print("test PESTICIDE PASSED")
+
+
 if __name__ == "__main__":
     test_addition()
     test_addition_with_bug()    
     test_addition_duplicate()
     test_addition_clusters()
     test_addition_commutative()
+    test_tax_calculator()
+    test_tax_calculator_pesticide()
     #test_addition_overkill() #can try it on yout risk
