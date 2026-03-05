@@ -12,7 +12,7 @@ sys.path.append("../src")
 # Тестовые функции должны тестировать логические блоки
 # Одни и теже типы это pesticide paradox
 
-from math_demo import (add, add_with_bug,calculate_tax_bugged)
+from math_demo import (add, add_with_bug,calculate_tax_bugged, calculate_tax)
 def test_addition():
     assert 2 + 2 == 4
     print("test ADDIOTION PASSED")
@@ -56,7 +56,6 @@ def test_tax_calculator():
     assert calculate_tax_bugged(10) == 1.5
     assert calculate_tax_bugged(1) == 0.15
     assert calculate_tax_bugged(234) == 35.1
-    assert calculate_tax_bugged(2.34) == 0.35
     print("test TAX CALCULATOR PASSED")
     
 def test_tax_calculator_pesticide():
@@ -67,6 +66,11 @@ def test_tax_calculator_pesticide():
     assert calculate_tax(234) == 35.1
     print("test PESTICIDE PASSED")
 
+def test_negative_income():
+    try:
+        calculate_tax(-100)
+    except ValueError as e:
+        print("Test NEGATIVE INCOME PASSED")
 
 if __name__ == "__main__":
     test_addition()

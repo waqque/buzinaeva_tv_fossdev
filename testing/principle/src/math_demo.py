@@ -7,4 +7,4 @@ def calculate_tax_bugged(income):
 def calculate_tax(income):
     if income < 0:
         raise ValueError("Could not have negative taxes")
-    int(income * 0.15 * 100)/100
+    return int(income * 0.15 * 100)/100  
