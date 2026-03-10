@@ -1,16 +1,23 @@
 def calculate_ndfl(income):
-    result = 0
+    """Прогрессивная шкала НДФЛ по РФ."""
+    if income <= 0:
+        return 0
+    
     tiers = [
-        (0, 0, 0.13), 
-        (0, 0, 0.15), 
-        
+        (2_400_000, 0.13, 0),           # до 2.4млн: 13%
+        (5_000_000, 0.15, 312_000),     # 2.4-5млн: 312к + 15%
+        (20_000_000, 0.18, 702_000),    # 5-20млн: 702к + 18%
+        (50_000_000, 0.20, 3_402_000),  # 20-50млн: 3.402млн + 20%
+        (float('inf'), 0.22, 9_402_000) # >50млн: 9.402млн + 22%
     ]
-    if income > 2_400_000:
-        result = income * 0.13
-    elif income < 5_000_000:
-        result = (income * 0.13 + income - 2_400_000) * 0.15
-    elif income < 20_000_000:
-        result = (2_400_000 * 0.13 + 2_600_000 * 0.15 + 15_000_000 * 0.18) + (income - 20_000_000) * 0.20
-    elif income > 50_000_000:
-        result = (2_400_000 * 0.13 + 2_600_000 * 0.15 + 15_000_000 * 0.18 + 30_000_000 * 0.20) + (income - 50_000_000) * 0.22
-    return result
+    
+    tax = 0
+    prev_limit = 0
+    
+    for limit, rate, base_tax in tiers:
+        if income > prev_limit:
+            taxable = min(income, limit) - prev_limit
+            tax += taxable * rate
+        prev_limit = limit
+    
+    return round(tax) 
