@@ -1,18 +1,23 @@
-.DEFAULT_GOAL := help
+.PHONY: task1 task2 task3 task4 task5 clean-all
 
-create-practice:
-ifndef PRACTICE
-	$(error must pass val PRACTICE)
-endif
-	@echo "Creating practice"
-	mkdir -p $(PRACTICE)
-	cp PracticeMakefile $(PRACTICE)/Makefile
+task1:
+	cd task1-env && make run
 
-remove-practice:
-ifndef PRACTICE
-	$(error must pass val PRACTICE)
-endif
-	rm -rf $(PRACTICE)
+task2:
+	cd task2-deps && make check
 
-help:
-	@echo "This makefile for repo.level activity"
+task3:
+	cd task3-types && make check
+
+task4:
+	cd task4-style && make format && make lint
+
+task5:
+	cd task5-compose && make check
+
+clean-all:
+	cd task1-env && make clean || true
+	cd task2-deps && make clean || true
+	cd task3-types && make clean || true
+	cd task4-style && make clean || true
+	cd task5-compose && make clean || true
