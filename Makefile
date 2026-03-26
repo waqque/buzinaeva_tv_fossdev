@@ -1,23 +1,35 @@
-.PHONY: task1 task2 task3 task4 task5 clean-all
+VENV := .venv
+PYTHON := $(VENV)/Scripts/python
+PIP := $(VENV)/Scripts/pip
 
-task1:
-	cd task1-env && make run
+$(VENV)/Scripts/python:
+	python -m venv $(VENV)
+	$(PIP) install --upgrade pip
 
-task2:
-	cd task2-deps && make check
+install: $(VENV)/Scripts/python
+	$(PIP) install -r requirements.txt
 
-task3:
-	cd task3-types && make check
+run: install
+	$(PYTHON) src/app.py
 
-task4:
-	cd task4-style && make format && make lint
+check-deps: install
+	$(PYTHON) scripts/check_requirements.py
 
-task5:
-	cd task5-compose && make check
+typecheck: install
+	$(PYTHON) -m mypy src/
 
-clean-all:
-	cd task1-env && make clean || true
-	cd task2-deps && make clean || true
-	cd task3-types && make clean || true
-	cd task4-style && make clean || true
-	cd task5-compose && make clean || true
+format: install
+	$(PYTHON) -m black src/
+
+lint: install
+	$(PYTHON) -m flake8 src/
+
+check: typecheck check-deps lint
+	@echo "All checks passed"
+
+clean:
+	rm -rf $(VENV)
+	find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
+	find . -type f -name "*.pyc" -delete
+
+.PHONY: install run check-deps typecheck format lint check clean
