@@ -1,4 +1,5 @@
 requests
+numpy
 mypy
 black
 flake8
