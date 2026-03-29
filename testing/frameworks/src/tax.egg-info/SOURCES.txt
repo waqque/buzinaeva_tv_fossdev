@@ -1,6 +1,0 @@
-setup.py
-src/tax/income.py
-src/tax.egg-info/PKG-INFO
-src/tax.egg-info/SOURCES.txt
-src/tax.egg-info/dependency_links.txt
-src/tax.egg-info/top_level.txt
