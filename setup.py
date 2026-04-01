@@ -6,8 +6,8 @@ with open("README.md", "r", encoding="utf-8") as fh:
 setup(
     name="fossdev-automation",
     version="0.1.0",
-    author="Your Name",
-    author_email="your.email@example.com",
+    author="waqque",
+    author_email="waqqueta@gmail.com",
     description="Automation tools for Python development with Makefile",
     long_description=long_description,
     long_description_content_type="text/markdown",
