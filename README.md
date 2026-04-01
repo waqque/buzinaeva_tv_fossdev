@@ -180,7 +180,7 @@ def foo( x,y ): return x+y  # → def foo(x, y): return x + y
 ## Публикация на Test PyPI
 
 ```bash
-pip install --index-url https://test.pypi.org/simple/ fossdev-tools
+pip install --index-url https://test.pypi.org/simple/ fossdev-automation
 ```
 
 ### CLI команды
@@ -192,7 +192,6 @@ fossdev format
 fossdev info
 ```
 
-[Пакет на TestPyPI](https://test.pypi.org/project/fossdev-tools/)
 
 ## Воспроизводимость
 
@@ -203,9 +202,5 @@ git status --porcelain  # чисто
 make check              # все проходит
 ```
 
-## Требования
-- Python 3.8+
-- Make (Git Bash на Windows)
-- Интернет
 
 ***

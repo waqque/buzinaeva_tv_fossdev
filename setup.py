@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="fossdev-automation",
-    version="0.1.0",
+    version="0.1.2",
     author="waqque",
     author_email="waqqueta@gmail.com",
     description="Automation tools for Python development with Makefile",
