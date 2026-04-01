@@ -32,4 +32,4 @@ clean:
 	find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
 	find . -type f -name "*.pyc" -delete
 
-.PHONY: install run check-deps typecheck format lint check clean
+.PHONY: install run check-deps typecheck format lint check cleanmake format
