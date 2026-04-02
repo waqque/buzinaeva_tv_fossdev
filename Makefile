@@ -1,35 +1,60 @@
-VENV := .venv
-PYTHON := $(VENV)/Scripts/python
-PIP := $(VENV)/Scripts/pip
+.DEFAULT_GOAL := help
 
-$(VENV)/Scripts/python:
-	python -m venv $(VENV)
-	$(PIP) install --upgrade pip
+.PHONY: create-practice remove-practice help create-structure install-dep install test-python test
 
-install: $(VENV)/Scripts/python
-	$(PIP) install -r requirements.txt
+create-practice:
+ifndef PRACTICE
+	$(error must pass val PRACTICE)
+endif
+	@echo "Creating practice: $(PRACTICE)"
+	mkdir -p $(PRACTICE)
+	cp PracticeMakefile $(PRACTICE)/Makefile
+	@echo "Practice $(PRACTICE) created successfully!"
+	@echo ""
+	@echo "Initializing project structure inside $(PRACTICE)..."
+	cd $(PRACTICE) && make init
+	@echo ""
+	@echo "========================================="
+	@echo "Practice $(PRACTICE) is ready!"
+	@echo "To work with it, run: cd $(PRACTICE)"
+	@echo "Then run 'make help' to see available commands"
+	@echo "========================================="
 
-run: install
-	$(PYTHON) src/app.py
+remove-practice:
+ifndef PRACTICE
+	$(error must pass val PRACTICE)
+endif
+	@echo "Removing practice: $(PRACTICE)"
+	rm -rf $(PRACTICE)
+	@echo "Practice $(PRACTICE) removed successfully!"
 
-check-deps: install
-	$(PYTHON) scripts/check_requirements.py
+help:
+	@echo "This makefile for repo.level activity"
+	@echo ""
+	@echo "Available commands:"
+	@echo "  make create-practice PRACTICE=<name>  - Create new practice directory with full structure"
+	@echo "  make remove-practice PRACTICE=<name>  - Remove practice directory"
+	@echo "  make create-structure                 - Create project structure in current directory"
+	@echo "  make install-dep                      - Install dependencies"
+	@echo "  make install                          - Install package in dev mode"
+	@echo "  make test-python                      - Run pytest"
+	@echo "  make test                             - Install deps and run tests"
 
-typecheck: install
-	$(PYTHON) -m mypy src/
+create-structure:
+	@echo "Creating project structure..."
+	mkdir -p src tests docs
+	touch README.md setup.py requirements.txt
+	touch docs/DOMAIN.md
+	touch src/.gitkeep tests/.gitkeep
+	@echo "Project structure created successfully!"
 
-format: install
-	$(PYTHON) -m black src/
+install-dep:
+	pip install -r requirements.txt
 
-lint: install
-	$(PYTHON) -m flake8 src/
+install:
+	pip install -e .
 
-check: typecheck check-deps lint
-	@echo "All checks passed"
+test-python:
+	python3 -m pytest -v
 
-clean:
-	rm -rf $(VENV)
-	find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
-	find . -type f -name "*.pyc" -delete
-
-.PHONY: install run check-deps typecheck format lint check cleanmake format
+test: install-dep install test-python
