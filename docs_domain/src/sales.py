@@ -1,72 +1,77 @@
-# TODO refactor this module using business logic names
-
-from typing import List, Dict, Optional, Any
+# TODO refactor this module using buisness logic names
 
 
-def _row(x: str) -> Optional[Dict[str, Any]]:
-    """Parse one line from file into a dictionary."""
-    # x is one line from file
-    p = x.strip().split(",")  # split by comma
-    if len(p) != 4:  # if line is bad
-        return None  # return nothing
+def _parse_record(line: str) -> dict | None:
+    """Parsing information for one sale.
 
-    name = p[0]  # product name
-    category = p[1]  # product category
-    price = float(p[2])  # price of one item
-    quantity = int(p[3])  # amount of items
+    Parameters:
+        line - string that contain sale record in form of comma-separated values
 
-    return {
-        "name": name,
-        "category": category,
-        "price": price,
-        "quantity": quantity,
-    }  # make dict with business logic names
+    Returns:
+        sale - sale information in form of dict
+
+    Raises:
+        ValueError
+    """
+    if line == "":
+        raise ValueError("Got zero length line")
+    
+    sale = line.strip().split(",") 
+    if len(sale) != 4:  # according specs each sale is defined by four fields
+        return None
+
+    product_name = sale[0] 
+    category = sale[1]
+    try:
+        unit_price = float(sale[2])
+        quantity = int(sale[3])
+        if int(sale[3]) != float(sale[3]):
+            return None
+    except ValueError:
+        return None
+    
+    return {"n": product_name, "c": category, "a": unit_price, "q": quantity} 
 
 
-def read_data(path: str) -> List[Dict[str, Any]]:
-    """Read and parse data from CSV file."""
+def read_data(path):
     res = []  # final list
     with open(path, "r", encoding="utf-8") as f:  # open file
         for x in f:  # go over lines
-            r = _row(x)  # convert line to dict
+            r = _parse_record(x)  # convert line to dict
             if r is not None:  # if parsing was ok
                 res.append(r)  # add to result
     return res  # return result
 
 
-def total(ds: List[Dict[str, Any]], d: float = 0) -> float:
-    """Calculate total sum with optional discount percentage."""
+def total(ds, d=0):
     s = 0  # total sum
-    for item in ds:  # loop all rows
-        s = s + item["price"] * item["quantity"]  # add price * quantity
+    for i in ds:  # loop all rows
+        s = s + i["a"] * i["q"]  # add price * quantity
     if d:  # if discount exists
         s = s - s * d / 100  # apply discount
     return s  # give answer
 
 
-def find_big(ds: List[Dict[str, Any]], t: float) -> List[Dict[str, Any]]:
-    """Find rows where total value is >= threshold."""
+def find_big(ds, t):
     out = []  # rows that are big enough
-    for item in ds:  # each row
-        x = item["price"] * item["quantity"]  # row money
+    for i in ds:  # each row
+        x = i["a"] * i["q"]  # row money
         if x >= t:  # compare with threshold
-            out.append(item)  # save row
+            out.append(i)  # save row
     return out  # done
 
 
-def by_category(ds: List[Dict[str, Any]]) -> Dict[str, float]:
-    """Group total amounts by category."""
+def by_category(ds):
     m = {}  # category to money
-    for item in ds:  # each row
-        k = item["category"]  # category name
+    for i in ds:  # each row
+        k = i["c"]  # category name
         if k not in m:  # create if needed
             m[k] = 0  # start from zero
-        m[k] += item["price"] * item["quantity"]  # add row amount
+        m[k] += i["a"] * i["q"]  # add row amount
     return m  # return mapping
 
 
-def report(ds: List[Dict[str, Any]]) -> str:
-    """Generate a formatted report."""
+def report(ds):
     lines = []  # text lines
     lines.append("Report")  # title
     lines.append("------")  # separator
@@ -80,7 +85,7 @@ def report(ds: List[Dict[str, Any]]) -> str:
     return "\n".join(lines)  # merge lines
 
 
-def write_report(path: str, txt: str) -> None:
+def write_report(path, txt):
     # TODO better errors
     with open(path, "w", encoding="utf-8") as f:  # open file for writing
         f.write(txt)  # write text
