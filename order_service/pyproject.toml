@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "buzinaeva-tv-fossdev"
+version = "0.1.0"
+description = "A sample project"
+authors = ["Tatiana Buzinaeva <waqqueta@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "buzinaeva_tv_fossdev"}]
+
+[tool.poetry.dependencies]
+python = ">=3.11,<4.0"
+fastapi = "^0.136.1"
+uvicorn = {extras = ["standart"], version = "^0.46.0"}
+httpx = "^0.28.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
