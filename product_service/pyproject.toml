@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "product-service"
+version = "0.1.0"
+description = "Product Service for FOSS project"
+authors = ["Tatiana Buzinaeva <waqqueta@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+package-mode = false  # ⬅️ Добавьте эту строку
+
+[tool.poetry.dependencies]
+python = ">=3.11,<4.0"
+fastapi = "^0.115.0"
+uvicorn = "^0.34.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
