@@ -1,23 +1,18 @@
 import os
-
 import httpx
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 
-
 app = FastAPI(title="Order Service")
-
 
 PRODUCT_SERVICE_URL = os.getenv(
     "PRODUCT_SERVICE_URL",
     "http://127.0.0.1:8001",
 )
 
-
 class OrderRequest(BaseModel):
     product_id: str
     quantity: int = Field(gt=0)
-
 
 class OrderResponse(BaseModel):
     product_id: str
@@ -25,18 +20,23 @@ class OrderResponse(BaseModel):
     unit_price: float
     total: float
 
-
 class ProductFromService(BaseModel):
     id: str
     name: str
     price: float
     available: bool
 
+@app.get("/")
+def root():
+    return {
+        "service": "Order Service",
+        "status": "running",
+        "endpoints": ["GET /health", "POST /orders"]
+    }
 
 @app.get("/health")
 def health() -> dict[str, str]:
     return {"status": "ok", "service": "order-service"}
-
 
 @app.post("/orders", response_model=OrderResponse)
 async def create_order(order: OrderRequest) -> OrderResponse:
@@ -56,7 +56,6 @@ async def create_order(order: OrderRequest) -> OrderResponse:
         unit_price=product.price,
         total=total,
     )
-
 
 async def fetch_product(product_id: str) -> ProductFromService:
     url = f"{PRODUCT_SERVICE_URL}/products/{product_id}"

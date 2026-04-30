@@ -1,17 +1,17 @@
 [tool.poetry]
-name = "buzinaeva-tv-fossdev"
+name = "order-service"
 version = "0.1.0"
-description = "A sample project"
+description = "Order service for FOSS project"
 authors = ["Tatiana Buzinaeva <waqqueta@gmail.com>"]
 license = "MIT"
 readme = "README.md"
-packages = [{include = "buzinaeva_tv_fossdev"}]
 
 [tool.poetry.dependencies]
 python = ">=3.11,<4.0"
-fastapi = "^0.136.1"
-uvicorn = {extras = ["standart"], version = "^0.46.0"}
+fastapi = "^0.115.0"
+uvicorn = "^0.34.0"
 httpx = "^0.28.1"
+python-dotenv = "^1.2.2"
 
 [build-system]
 requires = ["poetry-core"]
